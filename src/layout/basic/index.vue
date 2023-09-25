@@ -11,14 +11,14 @@
     </RouterView>
     <RouterView v-if="!$route.meta.keepAlive" :key="$route.path" />
   </div>
-  <nut-tabbar unactive-color="#364636" active-color="#1989fa" bottom v-model="activeTab" v-show="tabbarVisible" @tab-switch="tabSwitch">
+  <nut-tabbar unactive-color="#364636" active-color="#837df9" bottom v-model="activeTab" v-show="tabbarVisible" @tab-switch="tabSwitch">
     <nut-tabbar-item v-for="item in tabItem" :key="item.key" :tab-title="item.label" :icon="item.icon" />
   </nut-tabbar>
 </template>
 
 <script lang="ts" setup name="BasicLayoutPage">
   import { useRouter } from 'vue-router';
-  import { Home, Horizontal, My, Location } from '@nutui/icons-vue';
+  import { Home, My, Message, Checklist } from '@nutui/icons-vue';
   import homeTop from '@/assets/images/home-top.png';
   import contactTop from '@/assets/images/contact-top.png';
   import courseTop from '@/assets/images/course-top.png';
@@ -26,9 +26,9 @@
 
   const tabItem = [
     { key: 'communication', icon: Home, label: '交流' },
-    { key: 'contact', icon: Home, label: '联系人' },
-    { key: 'course', icon: Home, label: '课程' },
-    { key: 'mine', icon: Home, label: '我的' },
+    { key: 'contact', icon: Message, label: '联系人' },
+    { key: 'course', icon: Checklist, label: '课程' },
+    { key: 'mine', icon: My, label: '我的' },
   ];
 
   const router = useRouter();
@@ -75,16 +75,16 @@
   const tabSwitch = (_item, index) => {
     switch (index) {
       case 0:
-        router.push('/home');
+        router.push('/communication');
         break;
       case 1:
-        router.push('/list');
+        router.push('/contact');
         break;
       case 2:
-        router.push('/member');
+        router.push('/course');
         break;
       case 3:
-        router.push('/demo');
+        router.push('/mine');
         break;
     }
     activeTab.value = index;

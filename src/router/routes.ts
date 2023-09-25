@@ -1,11 +1,11 @@
 export const routes = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/communication',
     component: () => import('@/layout/basic/index.vue'),
     children: [
       {
-        path: 'home',
+        path: 'communication',
         component: () => import('@/views/home/index.vue'),
         meta: {
           title: '交流',
@@ -13,7 +13,7 @@ export const routes = [
         },
       },
       {
-        path: 'list',
+        path: 'contact',
         component: () => import('@/views/list/index.vue'),
         meta: {
           title: '联系人',
@@ -21,7 +21,7 @@ export const routes = [
         },
       },
       {
-        path: 'member',
+        path: 'course',
         component: () => import('@/views/member/index.vue'),
         meta: {
           title: '课程',
@@ -29,7 +29,7 @@ export const routes = [
         },
       },
       {
-        path: 'demo',
+        path: 'mine',
         component: () => import('@/views/demo/index.vue'),
         meta: {
           title: '我的',
