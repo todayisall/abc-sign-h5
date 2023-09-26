@@ -1,20 +1,10 @@
 <template>
-  <nut-card
-    v-for="(item, index) in list"
-    :key="index"
-    :img-url="item.imgUrl"
-    :title="item.title"
-    :price="item.price"
-    :vip-price="item.vipPrice"
-    :shop-name="item.shopName"
-    :shopDesc="item.shopDesc"
-    :delivery="item.delivery"
-    @click="(_e) => toDetails(index)"
-  />
+  <div class="list"> 联系人 </div>
 </template>
 
 <script lang="ts" setup name="ListPage">
   import { listData } from './data';
+
   const router = useRouter();
 
   let list = ref(listData);

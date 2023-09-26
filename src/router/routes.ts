@@ -22,7 +22,7 @@ export const routes = [
       },
       {
         path: 'course',
-        component: () => import('@/views/member/index.vue'),
+        component: () => import('@/views/course/index.vue'),
         meta: {
           title: '课程',
           keepAlive: true,
@@ -30,7 +30,7 @@ export const routes = [
       },
       {
         path: 'mine',
-        component: () => import('@/views/demo/index.vue'),
+        component: () => import('@/views/mine/index.vue'),
         meta: {
           title: '我的',
           keepAlive: true,

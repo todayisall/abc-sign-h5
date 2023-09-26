@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BasicModal: typeof import('./../src/components/Modal/src/BasicModal.vue')['default']
+    CourseCard: typeof import('./../src/components/course-card/index.vue')['default']
     NutAvatar: typeof import('@nutui/nutui')['Avatar']
     NutButton: typeof import('@nutui/nutui')['Button']
     NutCard: typeof import('@nutui/nutui')['Card']
