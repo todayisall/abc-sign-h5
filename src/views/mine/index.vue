@@ -1,64 +1,237 @@
 <template>
-  <section>我的 </section>
+  <section>
+    <div class="user-info">
+      <div class="user-info__avatar">
+        <img src="@/assets/images/mine/avatar.png" alt="头像" />
+      </div>
+      <div class="middle">
+        <div class="user-info__name">13911815867</div>
+        <div class="process">sdfaf</div>
+      </div>
+      <div class="user-info__icon">
+        <img src="@/assets/images/mine/score.png" alt="" />
+        <span class="score">68</span>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="card">
+      <div class="cover">
+        <img src="@/assets/images/mine/card_1_head.png" alt="封面图片" />
+      </div>
+      <div class="content">
+        <div class="title">单次进度</div>
+        <div class="desc">
+          <div class="desc-status">已完成</div>
+          <div class="desc-process">总数: 50</div>
+        </div>
+      </div>
+      <div class="footer">
+        <img src="@/assets/images/mine/card_1_footer.png" alt="页脚" />
+        <div class="score">68</div>
+      </div>
+    </div>
+    <div class="card card-2">
+      <div class="cover">
+        <img src="@/assets/images/mine/card_2_head.png" alt="封面图片" />
+      </div>
+      <div class="content">
+        <div class="title">单词得分</div>
+        <div class="desc">
+          <div class="desc-status">已完成</div>
+          <div class="desc-process">总数: 50</div>
+        </div>
+      </div>
+      <div class="footer">
+        <img src="@/assets/images/mine/card_2_footer.png" alt="页脚" />
+        <div class="score">98</div>
+      </div>
+    </div>
+    <div class="card card-3">
+      <div class="cover">
+        <img src="@/assets/images/mine/card_3_head.png" alt="封面图片" />
+      </div>
+      <div class="content">
+        <div class="title">短语进度</div>
+        <div class="desc">
+          <div class="desc-status">已完成</div>
+          <div class="desc-process">总数: 50</div>
+        </div>
+      </div>
+      <div class="footer">
+        <img src="@/assets/images/mine/card_3_footer.png" alt="页脚" />
+        <div class="score">50</div>
+      </div>
+    </div>
+    <div class="card card-4">
+      <div class="cover">
+        <img src="@/assets/images/mine/card_4_head.png" alt="封面图片" />
+      </div>
+      <div class="content">
+        <div class="title">短语得分</div>
+        <div class="desc">
+          <div class="desc-status">已完成</div>
+          <div class="desc-process">总数: 10</div>
+        </div>
+      </div>
+      <div class="footer">
+        <img src="@/assets/images/mine/card_4_footer.png" alt="页脚" />
+        <div class="score">80</div>
+      </div>
+    </div>
+  </section>
 </template>
 
-<script setup name="DemoPage" lang="tsx">
-  import { openFactoryModal } from '@/components/Modal/index';
-  import 'quarkd/lib/button';
-
-  const openLargeModal = () => {
-    openFactoryModal({
-      renderComp: function () {
-        return <div>自定义内容</div>;
-      },
-    }).then((res) => {
-      console.log('确认成功', res);
-    });
-  };
-  const openSmallModal = () => {
-    openFactoryModal({
-      size: 'normal',
-      renderComp: function () {
-        return <div>自定义内容</div>;
-      },
-    }).then((res) => {
-      console.log('确认成功', res);
-    });
-  };
-</script>
+<script setup name="DemoPage" lang="tsx"></script>
 
 <style lang="scss" scoped>
   @import '../../styles/mixin.scss';
-
-  section {
-    .title {
-      display: inline-block;
-      margin-bottom: 40px;
-      font-size: 40px;
-      font-weight: 500;
-    }
-
-    &:nth-child(n) {
-      .title {
-        margin-top: 20px;
+  .user-info {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    height: 96px;
+    background-color: #fff;
+    .user-info__avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
-
-    &:first-child {
-      .title {
-        margin-top: 0;
+    .middle {
+      flex: 1;
+      margin-left: 10px;
+      .user-info__name {
+        font-size: 22px;
+        color: #121212;
+        margin-bottom: 5px;
+      }
+      .process {
+        font-size: 12px;
+        color: #999;
       }
     }
-
-    ::v-deep(.var-space) {
-      margin-bottom: 10px !important;
+    .user-info__icon {
+      position: relative;
+      img {
+        width: 90px;
+        height: 90px;
+      }
+      .score {
+        position: absolute;
+        top: 26px;
+        left: 32px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fda30d;
+      }
     }
   }
 
-  .demo {
-    > :nth-child(n) {
-      margin-right: 20px;
-      margin-bottom: 20px;
+  .card {
+    margin: 0 15px;
+    margin-top: 20px;
+    overflow: hidden;
+
+    background: #ffffff;
+    box-shadow: 0px 1px 10px 0px rgba(196, 200, 213, 0.4);
+    border-radius: 16px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    .cover {
+      height: 120px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .content {
+      padding: 10px 15px;
+      background-color: #fff;
+      flex: 1;
+      .title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #121212;
+        margin-bottom: 10px;
+      }
+      .desc {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .desc-status {
+          font-size: 12px;
+          color: #ffae04;
+          padding: 2px 10px;
+          background: #fff3d8;
+          border-radius: 4px;
+        }
+        .desc-process {
+          margin-left: 16px;
+          font-size: 12px;
+          color: #616572;
+          padding: 2px 10px;
+          background: #ebecef;
+          border-radius: 4px;
+        }
+      }
+    }
+    .footer {
+      height: 140px;
+      background-color: #fff;
+      position: relative;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .score {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: bold;
+        color: #ffffff;
+      }
+    }
+  }
+  .card-2 {
+    .content {
+      .desc {
+        .desc-status {
+          background: #fee8eb;
+          color: #ff7b8c;
+        }
+      }
+    }
+  }
+  .card-3 {
+    .content {
+      .desc {
+        .desc-status {
+          background: #f1ebfc;
+          color: #926ff7;
+        }
+      }
+    }
+  }
+  .card-4 {
+    .content {
+      .desc {
+        .desc-status {
+          background: #e8f7d6;
+          color: #6db834;
+        }
+      }
     }
   }
 </style>
