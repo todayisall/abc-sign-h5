@@ -1,9 +1,9 @@
 <template>
   <div class="course-wrap">
-    <CourseCard type="1" :current="7" :total="50" />
-    <CourseCard type="2" :current="12" :total="50" />
-    <CourseCard type="3" :current="3" :total="50" />
-    <CourseCard type="4" :current="0" :total="50" />
+    <CourseCard type="1" :current="7" :total="50" @click="goTo('/words')" />
+    <CourseCard type="2" :current="12" :total="50" @click="goTo('/wordsTest')" />
+    <CourseCard type="3" :current="3" :total="50" @click="goTo('/phrase')" />
+    <CourseCard type="4" :current="0" :total="50" @click="goTo('/phraseTest')" />
   </div>
 </template>
 
@@ -12,13 +12,8 @@
   import CourseCard from '@/components/course-card/index.vue';
 
   const router = useRouter();
-  // const userStore = useUserStore();
-  // const getUserInfo = computed(() => {
-  //   const { name = '' } = userStore.getUserInfo || {};
-  //   return name;
-  // });
-  const goLogin = () => {
-    router.push('/login');
+  const goTo = (path) => {
+    router.push(path);
   };
 </script>
 

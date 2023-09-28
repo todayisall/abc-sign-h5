@@ -1,59 +1,85 @@
 <template>
   <div class="login">
-    <h2>登录</h2>
-    <nut-form ref="ruleForm" :model-value="formData">
-      <nut-form-item required prop="name" :rules="[{ required: true, message: '请输入用户名' }]">
-        <input v-model="formData.name" class="nut-input-text" placeholder="请输入用户名" type="text" />
-      </nut-form-item>
-      <nut-form-item required prop="pwd" :rules="[{ required: true, message: '请填写联系电话' }]">
-        <input v-model="formData.pwd" class="nut-input-text" placeholder="请输入密码" type="password" />
-      </nut-form-item>
-      <nut-button block type="info" @click="submit"> 登录 </nut-button>
-    </nut-form>
+    <div class="logo">
+      <img src="@/assets/images/login/logo.png" alt="logo" />
+    </div>
+    <div class="main">
+      <form ref="ruleForm" :model-value="formData">
+        <div class="form-content">
+          <input v-model="formData.name" class="nut-input-text" placeholder="请输入用户名" type="text" />
+          <input v-model="formData.pwd" class="nut-input-text" placeholder="请输入密码" type="password" />
+          <nut-button class="submit-btn" block type="info" @click="submit"> 登录 </nut-button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup name="LoginPage">
   import router from '@/router';
   import { reactive, ref } from 'vue';
-  import { useUserStore } from '@/store/modules/user';
+  import { showToast } from '@nutui/nutui';
 
-  const userStore = useUserStore();
   const formData = reactive({
     name: '',
     pwd: '',
   });
   const ruleForm = ref<any>(null);
   const submit = () => {
-    ruleForm.value.validate().then(async ({ valid, errors }: any) => {
-      if (valid) {
-        const userInfo = await userStore.login();
-        if (userInfo) {
-          router.push({ path: '/home' });
-        }
-      } else {
-        console.log('error submit!!', errors);
-      }
-    });
+    // 提示登录成功, 并跳转到首页
+    showToast.text('登录成功');
+    setTimeout(() => {
+      router.push('/communication');
+    }, 1000);
   };
 </script>
 
 <style scoped lang="scss">
   .login {
+    background: url('@/assets/images/login/login_bg.png') no-repeat center center;
+    background-size: cover;
     padding: 20px;
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
 
-    h2 {
-      letter-spacing: 10px;
-      text-align: center;
+    .logo {
+      position: relative;
+      top: 180px;
+      width: 180px;
+      margin: 0 auto;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
+    .main {
+      position: relative;
+      top: 24%;
+    }
+    .form-content {
+      background-color: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 46px;
+      .nut-input-text {
+        height: 80px;
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #ffffff;
+        border-radius: 40px;
+        margin-bottom: 20px;
+      }
 
-    .nut-form-item {
-      margin-bottom: 20px;
-      border-radius: 20px;
-      background: #f2f3f5;
-
-      input {
-        background: transparent;
+      .submit-btn {
+        height: 80px;
+        width: 100%;
+        background: linear-gradient(90deg, #ffd74b 0%, #ffba19 100%);
+        box-shadow: 0px 10px 20px 0px rgba(255, 188, 28, 0.2);
+        border-radius: 40px;
+        font-size: 28px;
+        font-weight: bold;
       }
     }
   }

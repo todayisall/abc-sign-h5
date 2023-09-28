@@ -56,6 +56,42 @@ export const routes = [
       keepAlive: true,
     },
   },
+  {
+    name: 'words',
+    path: '/words',
+    component: () => import('@/views/course/Words.vue'),
+    meta: {
+      title: 'words',
+      keepAlive: true,
+    },
+  },
+  {
+    name: 'wordsTest',
+    path: '/wordsTest',
+    component: () => import('@/views/course/WordTest.vue'),
+    meta: {
+      title: 'wordsTest',
+      keepAlive: true,
+    },
+  },
+  {
+    name: 'phrase',
+    path: '/phrase',
+    component: () => import('@/views/course/phrase.vue'),
+    meta: {
+      title: 'phrase',
+      keepAlive: true,
+    },
+  },
+  {
+    name: 'phraseTest',
+    path: '/phraseTest',
+    component: () => import('@/views/course/phraseTest.vue'),
+    meta: {
+      title: 'phraseTest',
+      keepAlive: true,
+    },
+  },
   // 匹配不到重定向会主页
   {
     // 找不到路由重定向到404页面
