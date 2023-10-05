@@ -59,7 +59,7 @@ export function createVitePlugins(env: ViteEnv, isBuild: boolean) {
   // vite-plugin-svg-icons
   vitePlugins.push(ConfigSvgIconsPlugin(isBuild));
 
-  // vitePlugins.push(basicSsl());
+  vitePlugins.push(basicSsl());
 
   if (isBuild) {
     // vite-plugin-imagemin

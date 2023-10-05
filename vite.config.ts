@@ -44,6 +44,11 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/socket.io/, ''),
         },
+        '/resource/video/': {
+          target: 'http://43.136.59.50:9870',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/resource\/video/, ''),
+        },
       },
     },
     plugins: createVitePlugins(viteEnv, isProduction),

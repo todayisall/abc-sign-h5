@@ -37,7 +37,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 4,
         characters: '你好',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/你好.mp4',
+        videoUrl: '/resource/video/children-service/static/你好.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['你好', '我', '你'],
@@ -47,7 +47,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 5,
         characters: '你是谁',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/你是谁.mp4',
+        videoUrl: '/resource/video/children-service/static/你是谁.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['你好', '我', '你是谁'],
@@ -57,7 +57,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 6,
         characters: '你会做什么',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/你会做什么.mp4',
+        videoUrl: '/resource/video/children-service/static/你会做什么.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['你好', '你会做什么', '你是谁'],
@@ -67,7 +67,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 7,
         characters: '对不起',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/对不起.mp4',
+        videoUrl: '/resource/video/children-service/static/对不起.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['你好', '对不起', '你是谁'],
@@ -77,7 +77,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 8,
         characters: '谢谢',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/谢谢.mp4',
+        videoUrl: '/resource/video/children-service/static/谢谢.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['你好', '对不起', '谢谢'],
@@ -87,7 +87,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 9,
         characters: '再见',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/再见.mp4',
+        videoUrl: '/resource/video/children-service/static/再见.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['再见', '对不起', '你是谁'],
@@ -97,7 +97,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 10,
         characters: '你吃饭了吗',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/你吃饭了吗.mp4',
+        videoUrl: '/resource/video/children-service/static/你吃饭了吗.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['再见', '你吃饭了吗', '你是谁'],
@@ -107,7 +107,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 11,
         characters: '你从哪里来的',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/你从哪里来的.mp4',
+        videoUrl: '/resource/video/children-service/static/你从哪里来的.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['你从哪里来的', '你吃饭了吗', '你是谁'],
@@ -117,7 +117,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 12,
         characters: '你叫什么',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/你叫什么.mp4',
+        videoUrl: '/resource/video/children-service/static/你叫什么.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['你从哪里来的', '你吃饭了吗', '你叫什么'],
@@ -127,7 +127,7 @@ import { Success } from '@nutui/icons-vue';
       {
         id: 13,
         characters: '最近还好吗',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/最近还好吗.mp4',
+        videoUrl: '/resource/video/children-service/static/最近还好吗.mp4',
         videoPath: null,
         type: 'PHRASE',
         optionContent: ['最近还好吗', '你吃饭了吗', '你叫什么'],

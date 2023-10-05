@@ -1,25 +1,28 @@
 <template>
   <!-- 视频播放区 -->
   <div class="home">
-    <nut-popup style="width: 100%" v-model:visible="showVideo"
-      ><div class="video-wrap">
-        <video ref="video" src=""></video>
-        <!-- 增加结束视频按钮 -->
-        <div class="btn-wrap">
-          <van-button type="primary" @click="closRecognition">结束识别</van-button>
-        </div>
-      </div>
-    </nut-popup>
     <div class="card">
       <!-- 第一部分是一个待播放的视频 -->
       <div class="video-card">
-        <video class="play" ref="video" src="/video/demo.mp4"></video>
+        <video class="play" controls ref="video" src=""></video>
       </div>
+      <!-- 识别 & 播报按钮 -->
+      <!-- <div class="btn-wrap">
+        <van-button type="primary" @click="handleRecognition">识别</van-button>
+        <van-button type="primary" @click="handlePlay">播报</van-button>
+      </div> -->
+      <div class="btn-wrap">
+        <van-tabs v-model:active="active" @change="handleChange">
+          <van-tab title="识别" />
+          <van-tab title="播报" />
+        </van-tabs>
+      </div>
+      <!-- 第二部分是一个消息列表 -->
       <!-- 消息列表 -->
       <div class="messageList">
         <template v-if="recognitionResultList.length === 0"> 暂无消息</template>
         <template v-else>
-          <div class="message-item" v-for="item in recognitionResultList" :key="item.id">
+          <div class="message-item" v-for="item in recognitionResultList" :key="item.id" :class="{ right: item.type === 'right' }">
             <div class="message-item__content">{{ item.name }}</div>
             <!-- 增加一个播放的icon -->
             <van-icon name="play-circle-o" size="20px" color="#000" @click="handlePlay(item.url)" />
@@ -40,12 +43,21 @@
     </div> -->
 
     <!-- mock 手语识别 -->
-    <div class="wrap">
+    <!-- <div class="wrap">
       <van-button type="primary" @click="handleRecognition">视频识别</van-button>
-    </div>
+    </div> -->
     <!-- <div class="wrap">
       <van-button type="primary" @click="joinChannel">ai识别</van-button>
     </div> -->
+    <div class="btn-wrap">
+      <van-cell-group inset>
+        <van-field v-model="inputMessage" center clearable placeholder="请输入需要翻译的消息">
+          <template #button>
+            <van-button size="small" type="primary" @click="handleSend">发送</van-button>
+          </template>
+        </van-field>
+      </van-cell-group>
+    </div>
   </div>
 </template>
 
@@ -53,6 +65,33 @@
   import { showToast, Popup } from '@nutui/nutui';
   import '@nutui/nutui/dist/packages/toast/style';
 
+  const active = ref(1);
+
+  const inputMessage = ref('');
+  const handleSend = () => {
+    recognitionResultList.value.push({
+      id: recognitionResultList.value.length + 1,
+      name: inputMessage.value,
+      url: '/resource/video//children-service/static/你好.mp4',
+      type: 'right',
+    });
+    inputMessage.value = '';
+
+    // 消息列表的滚动条滚动到最低
+    nextTick(() => {
+      const messageList = document.querySelector('.messageList');
+      if (messageList) {
+        messageList.scrollTop = messageList.scrollHeight;
+      }
+    });
+  };
+  const handleChange = (index) => {
+    if (index === 0) {
+      handleRecognition();
+    } else {
+      closRecognition();
+    }
+  };
   const textToast = (msg) => {
     showToast.loading(msg, {
       duration: 1000,
@@ -60,6 +99,10 @@
     });
   };
 
+  onUnmounted(() => {
+    closeWs();
+    closeCamera();
+  });
   // 声网相关配置
   const agoraConfig = {
     appid: 'c9c7e2a5c7924281b298f24e06c6ad49',
@@ -219,6 +262,45 @@
     );
   };
 
+  const originMessage = [
+    {
+      id: 1,
+      name: '你好',
+      type: 'left',
+      url: '/resource/video//children-service/static/你好.mp4',
+    },
+    {
+      id: 2,
+      name: '你从哪里来',
+      type: 'left',
+      url: '/resource/video//children-service/static/你从哪里来的.mp4',
+    },
+    {
+      id: 3,
+      name: '你吃饭了么?',
+      type: 'left',
+      url: '/resource/video//children-service/static/最近还好吗.mp4',
+    },
+  ];
+  const timerInterval = ref(null);
+  // 接收消息的方法, 每分钟自动生成一条消息
+  const receiveMessage = () => {
+    // 如果有计时器, 则清空计时器
+    if (timerInterval.value) clearInterval(timerInterval.value);
+
+    timerInterval.value = setInterval(() => {
+      const newMessage = JSON.parse(JSON.stringify(originMessage[recognitionResultList.value.length % 3]));
+      console.log('newMessage', newMessage);
+      newMessage.id = recognitionResultList.value.length + 1;
+      recognitionResultList.value.push({ ...newMessage });
+      // 获取messageList的滚动条, 自动滚动到底部
+      const messageList = document.querySelector('.messageList');
+      if (messageList) {
+        messageList.scrollTop = messageList.scrollHeight;
+      }
+    }, 1000);
+  };
+
   const openCamera = () => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices = {};
@@ -236,6 +318,9 @@
         video.onloadedmetadata = (e) => {
           video.play();
         };
+        // 清空消息
+        recognitionResultList.value = [];
+        receiveMessage();
       })
       .catch((err) => {
         console.log(err);
@@ -250,7 +335,6 @@
     }
   };
 
-  const showVideo = ref(false);
   const handleRecognition = () => {
     // 1. 初始化ws链接
     // 2. 获取资源
@@ -265,59 +349,25 @@
     }, 1000);
 
     setTimeout(() => {
-      showVideo.value = true;
       openCamera();
-    }, 2000);
+    }, 500);
   };
 
   // mock识别返回结果
   const recognitionResultList = ref([]);
-
-  // [
-  //   {
-  //     id: 1,
-  //     name: '你好',
-  //   },
-  //   {
-  //     id: 2,
-  //     name: '你叫什么名字',
-  //   },
-  //   {
-  //     id: 3,
-  //     name: '你来自哪里?',
-  //   },
-  // ]
-  const showMessageList = ref(false);
   // 关闭识别
   const closRecognition = () => {
-    showVideo.value = false;
+    // 清空消息生成器
+    if (timerInterval.value) clearInterval(timerInterval.value);
     closeCamera();
-
-    // 显示识别内容
-    showMessageList.value = true;
-    recognitionResultList.value = [
-      {
-        id: 1,
-        name: '你好',
-        url: 'http://43.136.59.50:9870/children-service/static/你好.mp4',
-      },
-      {
-        id: 2,
-        name: '你从哪里来',
-        url: 'http://43.136.59.50:9870/children-service/static/你从哪里来的.mp4',
-      },
-      {
-        id: 3,
-        name: '你吃饭了么?',
-        url: 'http://43.136.59.50:9870/children-service/static/最近还好吗.mp4',
-      },
-    ];
   };
 
   const handlePlay = (url) => {
     const video = document.querySelector('.play');
     if (!video) return;
 
+    // 关闭识别
+    closRecognition();
     // 设置视频播放地址
     video.src = url;
     video?.play();
@@ -332,6 +382,10 @@
       height: 100%;
       object-fit: cover;
     }
+  }
+  .btn-wrap {
+    margin-top: 24px;
+    width: 100%;
   }
   .video-wrap {
     padding-top: 36px;
@@ -357,9 +411,10 @@
     width: 100%;
     height: 20vh;
     overflow-y: scroll;
+    // 实现消息自动由下向上无限滚动
     .message-item {
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       height: 60px;
       background-color: #fff;
@@ -368,6 +423,11 @@
         font-size: 18px;
         font-weight: bold;
         color: #121212;
+      }
+    }
+    .right {
+      justify-content: flex-end;
+      .message-item__content {
       }
     }
   }

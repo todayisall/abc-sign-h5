@@ -32,7 +32,7 @@
       {
         id: 1,
         characters: '你',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/你.mp4',
+        videoUrl: '/resource/video/children-service/static/你.mp4',
         videoPath: null,
         type: 'WORD',
         optionContent: '["他","我","你"]',
@@ -42,7 +42,7 @@
       {
         id: 2,
         characters: '我',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/我.mp4',
+        videoUrl: '/resource/video/children-service/static/我.mp4',
         videoPath: null,
         type: 'WORD',
         optionContent: '["他","我","你"]',
@@ -52,7 +52,7 @@
       {
         id: 3,
         characters: '他',
-        videoUrl: 'http://43.136.59.50:9870/children-service/static/他.mp4',
+        videoUrl: '/resource/video/children-service/static/他.mp4',
         videoPath: null,
         type: 'WORD',
         optionContent: '["他","我","你"]',
