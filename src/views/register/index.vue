@@ -1,3 +1,4 @@
+<!-- 注册界面 -->
 <template>
   <div class="login">
     <div class="logo">
@@ -8,6 +9,7 @@
         <div class="form-content">
           <input v-model="formData.userName" class="nut-input-text" placeholder="请输入用户名" type="text" />
           <input v-model="formData.password" class="nut-input-text" placeholder="请输入密码" type="password" />
+          <input v-model="formData.conformPwd" class="nut-input-text" placeholder="重复密码" type="password" />
           <nut-button class="submit-btn" block type="info" @click="submit"> 登录 </nut-button>
         </div>
       </form>
@@ -19,31 +21,23 @@
   import { useRouter } from 'vue-router';
   import { reactive, ref } from 'vue';
   import { showToast } from '@nutui/nutui';
-  import { login, getUserInfo } from '@/api/index';
+  import { register } from '@/api/index';
 
   const router = useRouter();
-
   const formData = reactive({
-    password: '',
-    userName: '',
+    name: '',
+    pwd: '',
+    conformPwd: '',
+    userType: '1',
   });
   const ruleForm = ref<any>(null);
   const submit = () => {
-    login(formData).then((res: any) => {
-      // 提示登录成功, 并跳转到首页
-      showToast.text('登录成功');
-
-      // 保存token
-      localStorage.setItem('token', res.data);
-
-      // 查询个人信息
-      getUserInfo().then((res: any) => {
-        // 保存个人信息
-        localStorage.setItem('userInfo', JSON.stringify(res.data));
-      });
+    // todo 校验表单数据
+    register(formData).then((res: any) => {
+      showToast.text('注册成功');
       setTimeout(() => {
-        router.push('/communication');
-      }, 600);
+        router.push('/login');
+      }, 300);
     });
   };
 </script>

@@ -39,6 +39,11 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
       hmr: true,
       https: false,
       proxy: {
+        '/api': {
+          target: 'http://43.136.59.50:9870',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
         '/socket.io': {
           target: 'ws://47.100.114.23:10103',
           changeOrigin: true,

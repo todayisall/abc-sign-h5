@@ -23,9 +23,16 @@
         <template v-if="recognitionResultList.length === 0"> 暂无消息</template>
         <template v-else>
           <div class="message-item" v-for="item in recognitionResultList" :key="item.id" :class="{ right: item.type === 'right' }">
-            <div class="message-item__content">{{ item.name }}</div>
-            <!-- 增加一个播放的icon -->
-            <van-icon name="play-circle-o" size="20px" color="#000" @click="handlePlay(item.url)" />
+            <!-- 头像 -->
+            <div class="message-item__avatar">
+              <img v-if="item.type === 'right'" src="@/assets/images/child_avatar.jpg" alt="" />
+              <img v-else src="@/assets/images/robot_avatar.jpg" alt="" />
+            </div>
+            <div class="message-item__content">
+              <span>{{ item.name }}</span>
+              <!-- 增加一个播放的icon -->
+              <van-icon class="play" name="play-circle-o" size="20px" color="#000" @click="handlePlay(item.url)"
+            /></div>
           </div>
         </template>
       </div>
@@ -62,26 +69,42 @@
 </template>
 
 <script lang="ts" setup name="HomePage">
-  import { showToast, Popup } from '@nutui/nutui';
+  import { showToast } from '@nutui/nutui';
   import '@nutui/nutui/dist/packages/toast/style';
+
+  import { translate } from '@/api/index';
 
   const active = ref(1);
 
   const inputMessage = ref('');
   const handleSend = () => {
-    recognitionResultList.value.push({
-      id: recognitionResultList.value.length + 1,
-      name: inputMessage.value,
-      url: '/resource/video//children-service/static/你好.mp4',
-      type: 'right',
-    });
-    inputMessage.value = '';
+    // 翻译文本内容
+    translate({
+      content: inputMessage.value,
+    }).then((res: any) => {
+      if (res.code !== 200) {
+        textToast(res.message);
+        return;
+      } else if (res.data.indexOf('http') === -1) {
+        textToast(res.data);
+        return;
+      } else {
+        const videoUrl = res.data.replace('http://43.136.59.50:9870', '/resource/video');
+        recognitionResultList.value.push({
+          id: recognitionResultList.value.length + 1,
+          name: inputMessage.value,
+          url: videoUrl,
+          type: 'right',
+        });
+        inputMessage.value = '';
 
-    // 消息列表的滚动条滚动到最低
-    nextTick(() => {
-      const messageList = document.querySelector('.messageList');
-      if (messageList) {
-        messageList.scrollTop = messageList.scrollHeight;
+        // 消息列表的滚动条滚动到最低
+        nextTick(() => {
+          const messageList = document.querySelector('.messageList');
+          if (messageList) {
+            messageList.scrollTop = messageList.scrollHeight;
+          }
+        });
       }
     });
   };
@@ -344,6 +367,7 @@
     // 1. 模拟 -> 初始化ws链接
     textToast('初始化ws链接');
 
+    // initWs();
     setTimeout(() => {
       textToast('获取资源');
     }, 1000);
@@ -360,6 +384,7 @@
     // 清空消息生成器
     if (timerInterval.value) clearInterval(timerInterval.value);
     closeCamera();
+    closeWs();
   };
 
   const handlePlay = (url) => {
@@ -423,11 +448,27 @@
         font-size: 18px;
         font-weight: bold;
         color: #121212;
+        .play {
+          display: none;
+        }
+      }
+
+      &__avatar {
+        width: 64px;
+        height: 64px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
       }
     }
     .right {
-      justify-content: flex-end;
+      flex-direction: row-reverse;
       .message-item__content {
+        flex-direction: row-reverse;
+        .play {
+          display: inline-block;
+        }
       }
     }
   }

@@ -5,7 +5,7 @@
         <img src="@/assets/images/mine/avatar.png" alt="头像" />
       </div>
       <div class="middle">
-        <div class="user-info__name">13911815867</div>
+        <div class="user-info__name">{{ userInfo.user.userName }}</div>
         <div class="process">sdfaf</div>
       </div>
       <div class="user-info__icon">
@@ -82,7 +82,11 @@
   </section>
 </template>
 
-<script setup name="DemoPage" lang="tsx"></script>
+<script setup name="DemoPage" lang="tsx">
+  // 从localStorage中获取用户信息
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+  console.info('userInfo', userInfo);
+</script>
 
 <style lang="scss" scoped>
   @import '../../styles/mixin.scss';

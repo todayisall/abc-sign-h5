@@ -18,7 +18,7 @@
 
 <script lang="ts" setup name="BasicLayoutPage">
   import { useRouter } from 'vue-router';
-  import { Home, My, Message, Checklist } from '@nutui/icons-vue';
+  import { Home, My, Checklist } from '@nutui/icons-vue';
   import homeTop from '@/assets/images/home-top.png';
   import contactTop from '@/assets/images/contact-top.png';
   import courseTop from '@/assets/images/course-top.png';
@@ -26,7 +26,6 @@
 
   const tabItem = [
     { key: 'communication', icon: Home, label: '交流' },
-    { key: 'contact', icon: Message, label: '联系人' },
     { key: 'course', icon: Checklist, label: '课程' },
     { key: 'mine', icon: My, label: '我的' },
   ];
@@ -49,12 +48,9 @@
           backgroundImg.value = homeTop;
           break;
         case 1:
-          backgroundImg.value = contactTop;
-          break;
-        case 2:
           backgroundImg.value = courseTop;
           break;
-        case 3:
+        case 2:
           backgroundImg.value = mineTop;
           break;
       }
@@ -78,20 +74,13 @@
         router.push('/communication');
         break;
       case 1:
-        router.push('/contact');
-        break;
-      case 2:
         router.push('/course');
         break;
-      case 3:
+      case 2:
         router.push('/mine');
         break;
     }
     activeTab.value = index;
-  };
-
-  const goBack = () => {
-    router.go(-1);
   };
 </script>
 

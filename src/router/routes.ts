@@ -57,6 +57,15 @@ export const routes = [
     },
   },
   {
+    name: 'register',
+    path: '/register',
+    component: () => import('@/views/register/index.vue'),
+    meta: {
+      title: '注册',
+      keepAlive: true,
+    },
+  },
+  {
     name: 'words',
     path: '/words',
     component: () => import('@/views/course/Words.vue'),

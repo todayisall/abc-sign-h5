@@ -8,6 +8,11 @@ const service: AxiosInstance = axios.create({
 
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    // 自定义请求头, 增加token
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['token'] = `${token}`;
+    }
     return config;
   },
   (error: AxiosError) => {
@@ -18,8 +23,12 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: AxiosResponse) => {
     const res = response.data;
-    if (res.code !== 200) {
-      showToast(res.msg);
+    if (res.code === 401) {
+      showToast('登录过期，请重新登录');
+      localStorage.removeItem('token');
+      location.reload();
+    } else if (res.code !== 200) {
+      showToast(res.message);
       return Promise.reject(res.msg || 'Error');
     } else {
       return res;
