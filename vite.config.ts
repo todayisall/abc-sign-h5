@@ -44,10 +44,10 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
-        '/socket.io': {
+        '/wssUrl': {
           target: 'ws://47.100.114.23:10103',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/socket.io/, ''),
+          rewrite: (path) => path.replace(/^\/wssUrl/, ''),
         },
         '/resource/video/': {
           target: 'http://43.136.59.50:9870',

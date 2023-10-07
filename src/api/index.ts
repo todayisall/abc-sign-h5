@@ -50,8 +50,10 @@ export function translate(params: any) {
 /**
  * 获取课程列表
  */
-export function getCourseList() {
-  return http.get(`/api/user-service/api/v1/course/study/list`);
+export function getCourseList(params: any) {
+  return http.get(`/api/user-service/api/v1/course/study/list`, {
+    params: params,
+  });
 }
 
 /**
@@ -64,8 +66,10 @@ export function getCourseDetail(id: string) {
 /**
  * 获取测验列表
  */
-export function getTestList() {
-  return http.get(`/api/user-service/api/v1/course/test/list`);
+export function getTestList(params: any) {
+  return http.get(`/api/user-service/api/v1/course/test/list`, {
+    params: params,
+  });
 }
 
 /**

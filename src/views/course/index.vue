@@ -11,6 +11,11 @@
   import { useRouter } from 'vue-router';
   import CourseCard from '@/components/course-card/index.vue';
 
+  import { getCourseList, getTestList } from '@/api/index.ts';
+
+  getCourseList({ courseType: 'WORD' }).then((res) => {
+    console.log(res);
+  });
   const router = useRouter();
   const goTo = (path) => {
     router.push(path);

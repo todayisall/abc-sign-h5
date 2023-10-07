@@ -144,7 +144,7 @@
 
   // websocket config initWs
   const wsConfig = {
-    url: 'ws://47.100.114.23:10103',
+    url: `wss://${location.host}/wssUrl`,
     options: {
       reconnect: true,
     },
@@ -209,12 +209,24 @@
     };
     ws.onmessage = (e) => {
       const message = JSON.parse(e.data);
+      console.info('message', message);
       if (message.code === 0 && message.function === 'hand_resourceinfo') {
         console.log('获取资源成功 -> hand_resourceinfo');
         agoraConfig.uid = message.data.uid;
         agoraConfig.channelName = message.data.room;
         console.info('agoraConfig', message.data);
-      } else if (message.code === 0 && message.packType === 'noAck') {
+      } else if (message.code === 0 && message.function === 'hand_translate') {
+        recognitionResultList.value.push({
+          id: recognitionResultList.value.length + 1,
+          name: message.data.text,
+          type: 'left',
+        });
+        scrollToBottom();
+        // 增加消息
+      } else if (message.code === 0 && message.function === 'hand_DHeart') {
+        console.log('心跳检测 -> hand_DHeart');
+      } else {
+        console.log('message', message);
       }
     };
     ws.onerror = (e) => {
@@ -305,6 +317,14 @@
       url: '/resource/video//children-service/static/最近还好吗.mp4',
     },
   ];
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      const messageList = document.querySelector('.messageList');
+      if (messageList) {
+        messageList.scrollTop = messageList.scrollHeight;
+      }
+    }, 100);
+  };
   const timerInterval = ref(null);
   // 接收消息的方法, 每分钟自动生成一条消息
   const receiveMessage = () => {
@@ -343,7 +363,6 @@
         };
         // 清空消息
         recognitionResultList.value = [];
-        receiveMessage();
       })
       .catch((err) => {
         console.log(err);
@@ -370,6 +389,7 @@
     // initWs();
     setTimeout(() => {
       textToast('获取资源');
+      initWs();
     }, 1000);
 
     setTimeout(() => {
