@@ -41,9 +41,7 @@
         // 保存个人信息
         localStorage.setItem('userInfo', JSON.stringify(res.data));
       });
-      setTimeout(() => {
-        router.push('/communication');
-      }, 600);
+      router.replace('/communication');
     });
   };
 </script>

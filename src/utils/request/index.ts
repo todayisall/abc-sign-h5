@@ -1,7 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { showToast } from 'vant';
 
+const { VUE_APP_BASE_API } = import.meta.env;
+
 const service: AxiosInstance = axios.create({
+  baseURL: VUE_APP_BASE_API,
   withCredentials: false,
   timeout: 10000,
 });
