@@ -12,7 +12,24 @@
     <RouterView v-if="!$route.meta.keepAlive" :key="$route.path" />
   </div>
   <nut-tabbar unactive-color="#364636" active-color="#837df9" bottom v-model="activeTab" v-show="tabbarVisible" @tab-switch="tabSwitch">
-    <nut-tabbar-item v-for="item in tabItem" :key="item.key" :tab-title="item.label" :icon="item.icon" />
+    <nut-tabbar-item tab-title="交流">
+      <template #icon="props">
+        <img v-if="props.active" class="icon" src="@/assets/images/tab_home_active.png" alt="" />
+        <img v-else class="icon" src="@/assets/images/home-top.png" alt="" />
+      </template>
+    </nut-tabbar-item>
+    <nut-tabbar-item tab-title="课程">
+      <template #icon="props">
+        <img v-if="props.active" class="icon" src="@/assets/images/tab_course_active.png" alt="" />
+        <img v-else class="icon" src="@/assets/images/tab_course.png" alt="" />
+      </template>
+    </nut-tabbar-item>
+    <nut-tabbar-item tab-title="我的">
+      <template #icon="props">
+        <img v-if="props.active" class="icon" src="@/assets/images/tab_mine_active.png" alt="" />
+        <img v-else class="icon" src="@/assets/images/tab_mine.png" alt="" />
+      </template>
+    </nut-tabbar-item>
   </nut-tabbar>
 </template>
 
@@ -20,7 +37,6 @@
   import { useRouter } from 'vue-router';
   import { Home, My, Checklist } from '@nutui/icons-vue';
   import homeTop from '@/assets/images/home-top.png';
-  import contactTop from '@/assets/images/contact-top.png';
   import courseTop from '@/assets/images/course-top.png';
   import mineTop from '@/assets/images/mine-top.png';
 

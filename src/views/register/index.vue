@@ -7,10 +7,17 @@
     <div class="main">
       <form ref="ruleForm" :model-value="formData">
         <div class="form-content">
-          <input v-model="formData.userName" class="nut-input-text" placeholder="请输入用户名" type="text" />
-          <input v-model="formData.password" class="nut-input-text" placeholder="请输入密码" type="password" />
-          <input v-model="formData.conformPwd" class="nut-input-text" placeholder="重复密码" type="password" />
-          <nut-button class="submit-btn" block type="info" @click="submit"> 登录 </nut-button>
+          <!-- 用户名和密码, 带有左侧logo的input -->
+          <nut-input v-model="formData.userName" class="nut-input-text" placeholder="请输入用户名" type="text">
+            <template #left> <img class="input-icon" src="@/assets/images/login/user.png" alt="user" /> </template>
+          </nut-input>
+          <nut-input v-model="formData.password" class="nut-input-text" placeholder="请输入密码" type="password">
+            <template #left> <img class="input-icon" src="@/assets/images/login/password.png" alt="password" /> </template>
+          </nut-input>
+          <nut-input v-model="formData.conformPwd" class="nut-input-text" placeholder="重复密码" type="password">
+            <template #left> <img class="input-icon" src="@/assets/images/login/password.png" alt="password" /> </template>
+          </nut-input>
+          <nut-button class="submit-btn" block type="info" @click="submit"> 注册 </nut-button>
         </div>
       </form>
     </div>
@@ -20,21 +27,39 @@
 <script lang="ts" setup name="LoginPage">
   import { useRouter } from 'vue-router';
   import { reactive, ref } from 'vue';
-  import { showToast } from '@nutui/nutui';
+  import { showToast } from 'vant';
   import { register } from '@/api/index';
 
   const router = useRouter();
   const formData = reactive({
-    name: '',
-    pwd: '',
+    userName: '',
+    password: '',
     conformPwd: '',
     userType: '1',
   });
   const ruleForm = ref<any>(null);
   const submit = () => {
-    // todo 校验表单数据
+    if (!formData.userName) {
+      showToast({
+        message: '请输入用户名',
+      });
+      return;
+    }
+    if (!formData.password) {
+      showToast('请输入密码');
+      return;
+    }
+    if (!formData.conformPwd) {
+      showToast('请重复密码');
+      return;
+    }
+    if (formData.password !== formData.conformPwd) {
+      showToast('两次密码不一致');
+      return;
+    }
+
     register(formData).then((res: any) => {
-      showToast.text('注册成功');
+      showToast('注册成功');
       setTimeout(() => {
         router.push('/login');
       }, 300);
@@ -78,9 +103,16 @@
         border: 1px solid #ffffff;
         border-radius: 40px;
         margin-bottom: 20px;
+
+        .input-icon {
+          margin-left: -16px;
+          width: 32px;
+          height: 32px;
+        }
       }
 
       .submit-btn {
+        margin-top: 40px;
         height: 80px;
         width: 100%;
         background: linear-gradient(90deg, #ffd74b 0%, #ffba19 100%);

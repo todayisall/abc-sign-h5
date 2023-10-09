@@ -6,9 +6,16 @@
     <div class="main">
       <form ref="ruleForm" :model-value="formData">
         <div class="form-content">
-          <input v-model="formData.userName" class="nut-input-text" placeholder="请输入用户名" type="text" />
-          <input v-model="formData.password" class="nut-input-text" placeholder="请输入密码" type="password" />
+          <!-- 用户名和密码, 带有左侧logo的input -->
+          <nut-input v-model="formData.userName" class="nut-input-text" placeholder="请输入用户名" type="text">
+            <template #left> <img class="input-icon" src="@/assets/images/login/user.png" alt="user" /> </template>
+          </nut-input>
+          <nut-input v-model="formData.password" class="nut-input-text" placeholder="请输入密码" type="password">
+            <template #left> <img class="input-icon" src="@/assets/images/login/password.png" alt="password" /> </template>
+          </nut-input>
+          <!-- 记住密码radio -->
           <nut-button class="submit-btn" block type="info" @click="submit"> 登录 </nut-button>
+          <div class="tips"> 没有账号? <router-link to="/register">立即注册</router-link> </div>
         </div>
       </form>
     </div>
@@ -18,7 +25,10 @@
 <script lang="ts" setup name="LoginPage">
   import { useRouter } from 'vue-router';
   import { reactive, ref } from 'vue';
-  import { showToast } from '@nutui/nutui';
+
+  // vant toast
+  import { showToast } from 'vant';
+
   import { login, getUserInfo } from '@/api/index';
 
   const router = useRouter();
@@ -26,12 +36,27 @@
   const formData = reactive({
     password: '',
     userName: '',
+    remember: true,
   });
   const ruleForm = ref<any>(null);
   const submit = () => {
+    // 表单校验
+    // 如果用户名为空, 则给出提示
+    if (!formData.userName) {
+      showToast({
+        message: '请输入用户名',
+      });
+      return;
+    }
+    // 如果密码为空, 则给出提示
+    if (!formData.password) {
+      showToast('请输入密码');
+      return;
+    }
+
     login(formData).then((res: any) => {
       // 提示登录成功, 并跳转到首页
-      showToast.text('登录成功');
+      showToast('登录成功');
 
       // 保存token
       localStorage.setItem('token', res.data);
@@ -82,9 +107,29 @@
         border: 1px solid #ffffff;
         border-radius: 40px;
         margin-bottom: 20px;
+
+        .input-icon {
+          margin-left: -16px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+      .tips {
+        padding-top: 36px;
+        color: #ffffff;
+        font-size: 32px;
+        margin-top: 20px;
+        a {
+          color: #ffffff;
+          text-decoration: underline;
+        }
+      }
+      .nut-radio__label {
+        color: #d1cefd;
       }
 
       .submit-btn {
+        margin-top: 40px;
         height: 80px;
         width: 100%;
         background: linear-gradient(90deg, #ffd74b 0%, #ffba19 100%);
