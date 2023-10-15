@@ -37,28 +37,9 @@
         </template>
       </div>
     </div>
-    <!-- 初始化ws链接 -->
-    <!-- <div class="wrap">
-      <van-button type="primary" @click="initWs">初始化ws链接</van-button>
-      <van-button type="primary" @click="getResourse">获取资源</van-button>
-      <van-button type="primary" @click="closeWs">关闭链接</van-button>
-    </div> -->
-    <!-- 调起摄像头 -->
-    <!-- <div class="wrap">
-      <van-button type="primary" @click="openCamera">调起摄像头</van-button>
-      <van-button type="primary" @click="closeCamera">关闭摄像头</van-button>
-    </div> -->
-
-    <!-- mock 手语识别 -->
-    <!-- <div class="wrap">
-      <van-button type="primary" @click="handleRecognition">视频识别</van-button>
-    </div> -->
-    <!-- <div class="wrap">
-      <van-button type="primary" @click="joinChannel">ai识别</van-button>
-    </div> -->
     <div class="btn-wrap">
       <van-cell-group inset>
-        <van-field v-model="inputMessage" center clearable placeholder="请输入需要翻译的消息">
+        <van-field v-model="inputMessage" center clearable placeholder="请输入需要翻译的消息" :aria-autocomplete="canPlayList">
           <template #button>
             <van-button size="small" type="primary" @click="handleSend">发送</van-button>
           </template>
@@ -74,10 +55,23 @@
 
   import { translate } from '@/api/index';
 
+  import { onMounted, onUnmounted } from 'vue';
+
+  import { onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router';
+
+  // 可以用作播报的单词列表
+  const canPlayList = ['你好', '你是谁', '你会做什么', '对不起', '谢谢', '再见', '你从哪里来的', '你叫什么'];
+
   const active = ref(1);
 
   const inputMessage = ref('');
   const handleSend = () => {
+    // 如果播报内容不在可以播放的列表, 则给出提示
+    if (canPlayList.indexOf(inputMessage.value) === -1) {
+      showToast.warn(`暂不支持播报该内容, 可播报的短语部分如下: ${canPlayList.join(', ')}`);
+      return;
+    }
+
     // 翻译文本内容
     translate({
       content: inputMessage.value,
@@ -126,6 +120,18 @@
     closeWs();
     closeCamera();
   });
+  // 路由不活跃时的钩子函数
+  onBeforeRouteLeave(() => {
+    closeWs();
+    closeCamera();
+    // 卸载的时候保存消息记录, 最长50条
+    const messageList = recognitionResultList.value;
+    if (messageList.length > 50) {
+      recognitionResultList.value = messageList.slice(messageList.length - 50, messageList.length);
+    }
+    localStorage.setItem('messageList', JSON.stringify(recognitionResultList.value));
+  });
+
   // 声网相关配置
   const agoraConfig = {
     appid: 'c9c7e2a5c7924281b298f24e06c6ad49',
@@ -241,82 +247,6 @@
     ws?.close();
   };
 
-  // AgoraRTC sdk 加入频道
-  const joinChannel = () => {
-    const client = AgoraRTC.createClient({ codec: 'vp8', mode: 'rtc' });
-    client.init(agoraConfig.appid, () => {
-      console.log('AgoraRTC client initialized');
-      client.join(
-        agoraConfig.token ? agoraConfig.token : null,
-        agoraConfig.channelName,
-        agoraConfig.uid ? +agoraConfig.uid : null,
-        (uid) => {
-          console.log('User ' + uid + ' join channel successfully');
-          // 创建本地流
-          const localStream = AgoraRTC.createStream({
-            streamID: agoraConfig.uid,
-            audio: true,
-            video: true,
-            screen: false,
-          });
-          // 初始化本地流
-          localStream.init(
-            () => {
-              console.log('getUserMedia successfully');
-              localStream.play('agora_local');
-              // 将本地流发布到频道中
-              client.publish(localStream, (err) => {
-                console.log('Publish local stream error: ' + err);
-              });
-            },
-            (err) => {
-              console.log('getUserMedia failed', err);
-            },
-          );
-        },
-        (err) => {
-          console.log('Join channel failed', err);
-        },
-      );
-    });
-  };
-
-  // 获取资源
-  const getResourse = () => {
-    ws?.send(
-      JSON.stringify({
-        data: {
-          streamtype: 1, //自搭建流媒体
-        },
-        function: 'hand_getresource',
-        packType: 'request',
-        source: 'pc',
-        mode: 'test',
-        timestamp: Date.now(),
-      }),
-    );
-  };
-
-  const originMessage = [
-    {
-      id: 1,
-      name: '你好',
-      type: 'left',
-      url: '/resource/video//children-service/static/你好.mp4',
-    },
-    {
-      id: 2,
-      name: '你从哪里来',
-      type: 'left',
-      url: '/resource/video//children-service/static/你从哪里来的.mp4',
-    },
-    {
-      id: 3,
-      name: '你吃饭了么?',
-      type: 'left',
-      url: '/resource/video//children-service/static/最近还好吗.mp4',
-    },
-  ];
   const scrollToBottom = () => {
     setTimeout(() => {
       const messageList = document.querySelector('.messageList');
@@ -326,23 +256,6 @@
     }, 100);
   };
   const timerInterval = ref(null);
-  // 接收消息的方法, 每分钟自动生成一条消息
-  const receiveMessage = () => {
-    // 如果有计时器, 则清空计时器
-    if (timerInterval.value) clearInterval(timerInterval.value);
-
-    timerInterval.value = setInterval(() => {
-      const newMessage = JSON.parse(JSON.stringify(originMessage[recognitionResultList.value.length % 3]));
-      console.log('newMessage', newMessage);
-      newMessage.id = recognitionResultList.value.length + 1;
-      recognitionResultList.value.push({ ...newMessage });
-      // 获取messageList的滚动条, 自动滚动到底部
-      const messageList = document.querySelector('.messageList');
-      if (messageList) {
-        messageList.scrollTop = messageList.scrollHeight;
-      }
-    }, 1000);
-  };
 
   const openCamera = () => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -361,8 +274,6 @@
         video.onloadedmetadata = (e) => {
           video.play();
         };
-        // 清空消息
-        recognitionResultList.value = [];
       })
       .catch((err) => {
         console.log(err);
@@ -417,6 +328,22 @@
     video.src = url;
     video?.play();
   };
+
+  const initMessageList = () => {
+    // 初始化的时候获取消息记录
+    const messageList = localStorage.getItem('messageList');
+    if (messageList) {
+      recognitionResultList.value = JSON.parse(messageList);
+      scrollToBottom();
+    }
+  };
+  onMounted(() => {
+    initMessageList();
+  });
+  // 初始化的时候获取消息记录
+  onBeforeRouteUpdate(() => {
+    initMessageList();
+  });
 </script>
 <style lang="scss">
   .video-card {
@@ -465,7 +392,7 @@
       background-color: #fff;
       margin-bottom: 10px;
       .message-item__content {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
         color: #121212;
         .play {
