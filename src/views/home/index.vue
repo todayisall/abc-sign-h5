@@ -144,13 +144,13 @@
 
   // websocket config initWs
   const wsConfig = {
-    url: `wss://${location.host}/wssUrl`,
+    url: `wss://${location.host}`,
     options: {
       reconnect: true,
     },
     secret: '3mLKJQI6zGOgGTI938iGZLf2lrRQcA',
-    client_id: 'App_pufa_001',
-    passwd: '6vniPbTg95oex510ZhbKt3nkluU=',
+    client_id: 'App_beijingredshan1',
+    passwd: 'ybuv1S0XATTCdfmspzLRFMiveMY=',
   };
 
   let ws: WebSocket | null = null;
