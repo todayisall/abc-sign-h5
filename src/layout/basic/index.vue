@@ -3,7 +3,7 @@
     <img :src="backgroundImg" alt="banner" />
   </div>
   <van-nav-bar :title="$route.meta.title" class="nav-bar" :border="false" />
-  <div class="main-page" :class="{ tabbar: tabbarVisible, border: showBorder }">
+  <div class="main-page" :class="{ tabbar: tabbarVisible, border: activeTab !== 0 }">
     <RouterView v-slot="{ Component }" v-if="$route.meta.keepAlive">
       <keep-alive>
         <component :is="Component" :key="$route.path" />

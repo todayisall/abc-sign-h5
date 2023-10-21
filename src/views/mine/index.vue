@@ -6,7 +6,9 @@
       </div>
       <div class="middle">
         <div class="user-info__name">{{ userInfo.user.userName }}</div>
-        <div class="process">sdfaf</div>
+        <div class="process"></div>
+        <!-- 增加推出icon -->
+        <img class="logo" @click="handleLogout" src="@/assets/images/logout.png" alt="推出按钮" />
       </div>
       <div class="user-info__icon">
         <img src="@/assets/images/mine/score.png" alt="" />
@@ -22,8 +24,8 @@
       <div class="content">
         <div class="title">单次进度</div>
         <div class="desc">
-          <div class="desc-status">已完成</div>
-          <div class="desc-process">总数: 50</div>
+          <div class="desc-status"><span>已完成</span> <span class="num">42</span></div>
+          <div class="desc-process"><span>总数</span> <span class="num">50</span> </div>
         </div>
       </div>
       <div class="footer">
@@ -38,8 +40,8 @@
       <div class="content">
         <div class="title">单词得分</div>
         <div class="desc">
-          <div class="desc-status">已完成</div>
-          <div class="desc-process">总数: 50</div>
+          <div class="desc-status"><span>已完成</span> <span class="num">27</span></div>
+          <div class="desc-process"><span>总数</span> <span class="num">30</span></div>
         </div>
       </div>
       <div class="footer">
@@ -54,8 +56,8 @@
       <div class="content">
         <div class="title">短语进度</div>
         <div class="desc">
-          <div class="desc-status">已完成</div>
-          <div class="desc-process">总数: 50</div>
+          <div class="desc-status"><span>已完成</span> <span class="num">15</span></div>
+          <div class="desc-process"><span>总数</span> <span class="num">30</span></div>
         </div>
       </div>
       <div class="footer">
@@ -70,8 +72,8 @@
       <div class="content">
         <div class="title">短语得分</div>
         <div class="desc">
-          <div class="desc-status">已完成</div>
-          <div class="desc-process">总数: 10</div>
+          <div class="desc-status"><span>已完成</span> <span class="num">8</span></div>
+          <div class="desc-process"><span>总数</span> <span class="num">10</span></div>
         </div>
       </div>
       <div class="footer">
@@ -83,9 +85,25 @@
 </template>
 
 <script setup name="DemoPage" lang="tsx">
+  import { useRouter } from 'vue-router';
+  import { logout } from '@/api/index';
+  import { showToast } from 'vant';
   // 从localStorage中获取用户信息
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
   console.info('userInfo', userInfo);
+
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout().then(() => {
+      showToast({
+        message: '退出成功',
+      });
+      localStorage.removeItem('userInfo');
+      localStorage.removeItem('token');
+      router.push('/login');
+    });
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -102,15 +120,24 @@
       border-radius: 50%;
       overflow: hidden;
       img {
-        width: 100%;
         height: 100%;
       }
     }
     .middle {
       flex: 1;
       margin-left: 10px;
+      position: relative;
+
+      .logo {
+        position: absolute;
+        top: 0;
+        right: 60px;
+        width: 24px;
+        height: 24px;
+      }
       .user-info__name {
-        font-size: 22px;
+        font-size: 32px;
+        font-weight: bold;
         color: #121212;
         margin-bottom: 5px;
       }
@@ -127,9 +154,9 @@
       }
       .score {
         position: absolute;
-        top: 26px;
+        top: 24px;
         left: 32px;
-        font-size: 16px;
+        font-size: 24px;
         font-weight: bold;
         color: #fda30d;
       }
@@ -151,8 +178,8 @@
     align-items: center;
     .cover {
       height: 120px;
+      padding-left: 16px;
       img {
-        width: 100%;
         height: 100%;
         object-fit: cover;
       }
@@ -162,7 +189,7 @@
       background-color: #fff;
       flex: 1;
       .title {
-        font-size: 18px;
+        font-size: 30px;
         font-weight: bold;
         color: #121212;
         margin-bottom: 10px;
@@ -172,28 +199,41 @@
         justify-content: flex-start;
         align-items: center;
         .desc-status {
-          font-size: 12px;
+          font-size: 24px;
           color: #ffae04;
           padding: 2px 10px;
           background: #fff3d8;
           border-radius: 4px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 120px;
+          .num {
+            padding-top: 2px;
+          }
         }
         .desc-process {
           margin-left: 16px;
-          font-size: 12px;
+          font-size: 24px;
           color: #616572;
-          padding: 2px 10px;
+          padding: 4px 10px;
           background: #ebecef;
           border-radius: 4px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 120px;
+          .num {
+            padding-top: 2px;
+          }
         }
       }
     }
     .footer {
-      height: 140px;
+      height: 160px;
       background-color: #fff;
       position: relative;
       img {
-        width: 100%;
         height: 100%;
         object-fit: cover;
       }

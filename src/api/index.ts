@@ -18,6 +18,14 @@ export function loginPassword() {
 export function login(params: any) {
   return http.post(`/api/user-service/auth/user/login`, { ...params });
 }
+/**
+ * 用户推出
+ * @returns
+ * @param params
+ */
+export function logout() {
+  return http.post(`/api/user-service/auth/user/logout`);
+}
 
 /**
  * 用户注册

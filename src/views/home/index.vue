@@ -6,11 +6,6 @@
       <div class="video-card">
         <video class="play" controls ref="video" src=""></video>
       </div>
-      <!-- 识别 & 播报按钮 -->
-      <!-- <div class="btn-wrap">
-        <van-button type="primary" @click="handleRecognition">识别</van-button>
-        <van-button type="primary" @click="handlePlay">播报</van-button>
-      </div> -->
       <div class="btn-wrap">
         <van-tabs v-model:active="active" @change="handleChange">
           <van-tab title="识别" />
@@ -97,6 +92,13 @@
           const messageList = document.querySelector('.messageList');
           if (messageList) {
             messageList.scrollTop = messageList.scrollHeight;
+
+            // 自动播放
+            const video = document.querySelector('.play');
+            if (video) {
+              video.src = videoUrl;
+              video?.play();
+            }
           }
         });
       }
@@ -264,8 +266,7 @@
     // 调起 前置 摄像头
     navigator.mediaDevices
       .getUserMedia({
-        video: true,
-        audio: true,
+        video: { facingMode: { exact: 'environment' } },
       })
       .then((stream) => {
         console.log(stream);
@@ -346,6 +347,10 @@
   });
 </script>
 <style lang="scss">
+  .home {
+    // 灰色背景
+    background-color: #f5f5f5;
+  }
   .video-card {
     width: 100%;
     height: 40vh;
@@ -380,6 +385,8 @@
   }
 
   .messageList {
+    box-sizing: border-box;
+    padding: 15px 30px;
     width: 100%;
     height: 20vh;
     overflow-y: scroll;
@@ -389,10 +396,14 @@
       justify-content: flex-start;
       align-items: center;
       height: 60px;
-      background-color: #fff;
       margin-bottom: 10px;
+      gap: 16px;
       .message-item__content {
-        font-size: 20px;
+        // 消息气泡样式
+        border-radius: 16px;
+        padding: 8px 16px;
+        background-color: #fff;
+        font-size: 28px;
         font-weight: bold;
         color: #121212;
         .play {
@@ -403,6 +414,8 @@
       &__avatar {
         width: 64px;
         height: 64px;
+        border-radius: 32px;
+        overflow: hidden;
         img {
           width: 100%;
           height: 100%;
@@ -413,7 +426,9 @@
       flex-direction: row-reverse;
       .message-item__content {
         flex-direction: row-reverse;
+        background-color: #847df9;
         .play {
+          margin-left: 16px;
           display: inline-block;
         }
       }
